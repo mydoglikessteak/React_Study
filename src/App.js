@@ -1,70 +1,43 @@
-import logo from "./logo.svg";
 import "./App.css";
-import { Component, render } from "react";
+import { Component } from "react";
+import { loadPOsts } from "./utils/load-Posts";
+import { PostCard } from "./componnets/PostCard";
 
 class App extends Component {
   state = {
-    name: "Vinicius",
-    counter: 0,
+    posts: [],
   };
 
-  test = () => {
-    this.setState({ name: "Alexandre" });
-  };
+  async componentDidMount() {
+    await this.loadPosts();
+  }
+  componentDidUpdate() {}
 
-  testCounter = (event) => {
-    event.preventDefault();
-    const { counter } = this.state;
-    this.setState({ counter: counter + 1 });
-    this.setState({ name: "Vinicius" });
+  componentWillUnmount() {}
+
+  loadPosts = async () => {
+    const postsAndPhotos = await loadPOsts();
+    this.setState({ posts: postsAndPhotos });
   };
 
   render() {
-    const { name, counter } = this.state;
+    const { posts } = this.state;
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <p onClick={this.test}>
-            {name} {counter}
-          </p>
-          <a
-            onClick={this.testCounter}
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <section className="container">
+        <div className="posts">
+          {posts.map((post) => (
+            <PostCard
+              key={post.id}
+              tittle={post.title}
+              body={post.body}
+              id={post.id}
+              cover={post.cover}
+            />
+          ))}
+        </div>
+      </section>
     );
   }
 }
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
 
 export default App;
